@@ -21,6 +21,17 @@ contract AMM {
     mapping(address => uint) public shares;
     uint constant PRECISION = 10 ** 18;
 
+    event Swap(
+        address user,
+        address tokenGive,
+        uint tokenGiveAmount,
+        address tokenGet,
+        uint tokenGetAmount,
+        uint token1Balance,
+        uint token2Balance,
+        uint timestamp
+    );
+
     constructor(Token _token1, Token _token2) {
         token1 = _token1;
         token2 = _token2;
@@ -75,4 +86,52 @@ contract AMM {
     ) public view returns (uint256 token1Amount) {
         token1Amount = (token1Balance * _token2Amount) / token2Balance;
     }
+
+    function calculateToken1Swap(
+        uint _token1Amount
+    ) public view returns (uint token2Amount) {
+        uint token1After = token1Balance + _token1Amount;
+        uint token2After = K / token1After;
+        token2Amount = token2Balance - token2After;
+
+        //dont let pool go to zero
+        if (token2Amount == token2Balance) {
+            token2Amount--;
+        }
+
+        require(
+            token2Amount < token2Balance,
+            "swap cannot exceed pool balance"
+        );
+    }
+
+    function swapToken1(
+        uint _token1Amount
+    ) external returns (uint token2Amount) {
+        // Calculate Token 2 amount
+        token2Amount = calculateToken1Swap(_token1Amount);
+
+        // Do Swap
+        //1. Transfer token1 tokens out of user wallet to contract
+        token1.transferFrom(msg.sender, address(this), _token1Amount);
+        // 2. Update the token1 balance in the contract
+        token1Balance += _token1Amount;
+        // 3. Update the token2 balance in the contract
+        token2Balance -= token2Amount;
+        // 4. Transfer token2 tokens from contract to the user wallet
+        token2.transfer(msg.sender, token2Amount);
+        // Emit an event
+        emit Swap(
+            msg.sender,
+            address(token1),
+            _token1Amount,
+            address(token2),
+            token2Amount,
+            token1Balance,
+            token2Balance,
+            block.timestamp
+        );
+    }
+
+    // function swapToken2() {}
 }
