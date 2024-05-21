@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./Token.sol";
 
-// [] Manage pool
-// [] Manage Deposits
-// [] Facilitate Swaps
+// [x] Manage pool
+// [x] Manage Deposits
+// [-] Facilitate Swaps
 // [] Manage Withdraws
 
 contract AMM {
@@ -99,10 +99,7 @@ contract AMM {
             token2Amount--;
         }
 
-        require(
-            token2Amount < token2Balance,
-            "swap cannot exceed pool balance"
-        );
+        require(token2Amount < token2Balance, "swap amount too large");
     }
 
     function swapToken1(
@@ -133,5 +130,46 @@ contract AMM {
         );
     }
 
-    // function swapToken2() {}
+    function calculateToken2Swap(
+        uint _token2Amount
+    ) public view returns (uint token1Amount) {
+        uint token2After = token2Balance + _token2Amount;
+        uint token1After = K / token2After;
+        token1Amount = token1Balance - token1After;
+
+        //dont let pool go to zero
+        if (token1Amount == token1Balance) {
+            token1Amount--;
+        }
+
+        require(token1Amount < token1Balance, "swap amount too large");
+    }
+
+    function swapToken2(
+        uint _token2Amount
+    ) external returns (uint token1Amount) {
+        // Calculate Token 2 amount
+        token1Amount = calculateToken2Swap(_token2Amount);
+
+        // Do Swap
+        //1. Transfer token1 tokens out of user wallet to contract
+        token2.transferFrom(msg.sender, address(this), _token2Amount);
+        // 2. Update the token1 balance in the contract
+        token2Balance += _token2Amount;
+        // 3. Update the token2 balance in the contract
+        token1Balance -= token1Amount;
+        // 4. Transfer token2 tokens from contract to the user wallet
+        token1.transfer(msg.sender, token1Amount);
+        // Emit an event
+        emit Swap(
+            msg.sender,
+            address(token2),
+            _token2Amount,
+            address(token1),
+            token1Amount,
+            token1Balance,
+            token2Balance,
+            block.timestamp
+        );
+    }
 }
