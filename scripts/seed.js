@@ -65,7 +65,7 @@ async function main() {
 
   let ammount = tokens(100)
 
-  console.lof(`Fetching AMM... \n`)
+  console.log(`Fetching AMM... \n`)
 
   // Fetch AMM
   const amm = await ethers.getContractAt('AMM', config[chainId].amm.address)
@@ -101,15 +101,15 @@ async function main() {
   //
   
   console.log(`Investor 2 Swaps...\n`)
-
+  
   // Investor appproves all tokens
   transaction = await usd.connect(investor2).approve(amm.address, tokens(10))
   await transaction.wait()
-
+  
   // Investor swaps 1 token
   transaction = await amm.connect(investor2).swapToken2(tokens(1))
   await transaction.wait()
-
+  
   //////////////////////////////////////////////////////////////
   // Investor 3 Swaps: Dapp --> USD
   //

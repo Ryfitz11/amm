@@ -4,11 +4,6 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./Token.sol";
 
-// [x] Manage pool
-// [x] Manage Deposits
-// [-] Facilitate Swaps
-// [] Manage Withdraws
-
 contract AMM {
     Token public token1;
     Token public token2;
@@ -148,7 +143,7 @@ contract AMM {
     function swapToken2(
         uint _token2Amount
     ) external returns (uint token1Amount) {
-        // Calculate Token 2 amount
+        // Calculate Token 1 amount
         token1Amount = calculateToken2Swap(_token2Amount);
 
         // Do Swap
