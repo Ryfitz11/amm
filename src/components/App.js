@@ -16,10 +16,18 @@ function App() {
     // Initiate provider
     const provider = await loadProvider(dispatch)
 
+    // Fetch current networks chainId (e.g. hardhat: 31337, kovan: 42)
     const chainId = await loadNetwork(provider, dispatch)
 
+    // Reload page when network changes
+    window.ethereum.on('chainChanged', ()=>{
+      window.location.reload()
+    })
+
     // Fetch accounts
-    await loadAccount(dispatch)
+    window.ethereum.on('accountsChanged', async () => {
+      await loadAccount(dispatch)
+    })
 
     // Initiate Contracts
     await loadTokens(provider, chainId, dispatch)
@@ -34,7 +42,7 @@ function App() {
 
   return(
     <Container>
-      <Navigation account={'0x0...'} />
+      <Navigation/>
 
       <h1 className='my-4 text-center'>React Hardhat Template</h1>
 
