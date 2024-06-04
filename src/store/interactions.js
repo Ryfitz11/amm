@@ -65,3 +65,12 @@ export const LoadBalances = async (amm, tokens, account, dispatch) => {
   const shares = await amm.shares(account)
   dispatch(sharesLoaded(ethers.utils.formatUnits(shares.toString(), 'ether')))
 }
+
+//!SECTION-------------------------------------------------------------------------------
+// SWAP
+
+export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
+
+// 52:17
+
+}
