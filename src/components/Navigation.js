@@ -6,7 +6,7 @@ import Blockies from 'react-blockies'
 
 import logo from '../logo.png';
 
-import { loadAccount, LoadBalances } from "../store/interactions";
+import { loadAccount, loadBalances } from "../store/interactions";
 
 import config from '../config.json'
 
@@ -22,7 +22,7 @@ const Navigation = () => {
 
   const connectHandler = async () => {
     const account = await loadAccount(dispatch)
-    await LoadBalances(amm, tokens, account, dispatch)
+    await loadBalances(amm, tokens, account, dispatch)
   }
 
   const networkHanler = async (e) => {

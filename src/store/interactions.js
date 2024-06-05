@@ -4,7 +4,7 @@ import { setProvider, setNetwork, setAccount } from "./reducers/provider";
 
 import { setContracts, setSymbols, balancesLoaded } from "./reducers/tokens";
 
-import { setContract, sharesLoaded } from "./reducers/amm";
+import { setContract, sharesLoaded, swapRequest, swapSuccess, swapFail } from "./reducers/amm";
 
 
 import TOKEN_ABI from '../abis/Token.json'
@@ -53,7 +53,7 @@ export const loadAMM = async (provider, chainId, dispatch) => {
 
 //!SECTION-------------------------------------------------------------------------------
 // Load Balances & Shares
-export const LoadBalances = async (amm, tokens, account, dispatch) => {
+export const loadBalances = async (amm, tokens, account, dispatch) => {
   const balance1 = await tokens[0].balanceOf(account)
   const balance2 = await tokens[1].balanceOf(account)
 
@@ -70,7 +70,31 @@ export const LoadBalances = async (amm, tokens, account, dispatch) => {
 // SWAP
 
 export const swap = async (provider, amm, token, symbol, amount, dispatch) => {
+try {
 
-// 52:17
+  dispatch(swapRequest())
+  
+  let transaction 
+  
+  const signer = await provider.getSigner()
+  
+  transaction = await token.connect(signer).approve(amm.address, amount)
+  await transaction.wait()
+  
+  if (symbol === "DAPP") {
+    transaction = await amm.connect(signer).swapToken1(amount)
+  } else {
+    transaction = await amm.connect(signer).swapToken2(amount)
+  }
+  
+  await transaction.wait()
+  
+  dispatch(swapSuccess(transaction.hash))
+  
+} catch (error) {
+
+  dispatch(swapFail())
+}
+
 
 }

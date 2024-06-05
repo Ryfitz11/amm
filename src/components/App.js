@@ -39,7 +39,6 @@ function App() {
     // Initiate Contracts
     await loadTokens(provider, chainId, dispatch)
     await loadAMM(provider, chainId, dispatch)
-
   }
 
   useEffect(() => {
