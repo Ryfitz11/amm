@@ -63,17 +63,6 @@ function App() {
         </Routes>
 
       </HashRouter>
-
-
-
-
-
-      <h1 className='my-4 text-center'>React Hardhat Template</h1>
-
-        <>
-          <p className='text-center'><strong>Your ETH Balance:</strong> {0} ETH</p>
-          <p className='text-center'>Edit App.js to add your code here.</p>
-        </>
       
     </Container>
   )

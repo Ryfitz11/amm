@@ -12,7 +12,7 @@ import {ethers} from 'ethers'
 
 import Alert from './Alert'
 
-import {swap, loadBalances} from '../store/interactions'
+import { swap, loadBalances } from '../store/interactions'
 
 const Swap = () => {
   const[inputToken, setInputToken] = useState(null)
@@ -127,11 +127,11 @@ const Swap = () => {
                 <Form.Label><strong>Input:</strong></Form.Label>
                 <Form.Text muted>
                   Balance: { 
-                    // inputToken === symbols[0] ? (
-                    //   balances[0]
-                    // ) : inputToken === symbols[1] ? (
-                    //   balances[1]
-                    // ) : 0
+                    inputToken === symbols[0] ? (
+                      balances[0]
+                    ) : inputToken === symbols[1] ? (
+                      balances[1]
+                    ) : 0
                   }
                 </Form.Text>
               </div>
@@ -155,11 +155,11 @@ const Swap = () => {
                 <Form.Label><strong>Output:</strong></Form.Label>
                 <Form.Text muted>
                   Balance: {
-                    // outputToken === symbols[0] ? (
-                    //   balances[0]
-                    // ) : outputToken === symbols[1] ? (
-                    //   balances[1]
-                    // ) : 0
+                    outputToken === symbols[0] ? (
+                      balances[0]
+                    ) : outputToken === symbols[1] ? (
+                      balances[1]
+                    ) : 0
                     }
                 </Form.Text>
               </div>
@@ -188,29 +188,29 @@ const Swap = () => {
               </Form.Text>
 
               {isSwapping ? (
-        <Alert 
-          message={"Swap Pending..."}
-          transactionHash={null}
-          variant={'info'}
-          setShowAlert={setShowAlert}
-        />
-      ) : isSuccess && showAlert ? (
-        <Alert 
-          message={"Swap Successful"}
-          transactionHash={transactionHash}
-          variant={'success'}
-          setShowAlert={setShowAlert}
-      />
-      ) : !isSuccess && showAlert ? (
-        <Alert 
-          message={"Swap Failed"}
-          transactionHash={null}
-          variant={'danger'}
-          setShowAlert={setShowAlert}
-        />
-      ) : (
-        <></>
-      )}
+                <Alert 
+                  message={"Swap Pending..."}
+                  transactionHash={null}
+                  variant={'info'}
+                  setShowAlert={setShowAlert}
+                />
+              ) : isSuccess && showAlert ? (
+                <Alert 
+                  message={"Swap Successful"}
+                  transactionHash={transactionHash}
+                  variant={'success'}
+                  setShowAlert={setShowAlert}
+              />
+              ) : !isSuccess && showAlert ? (
+                <Alert 
+                  message={"Swap Failed"}
+                  transactionHash={null}
+                  variant={'danger'}
+                  setShowAlert={setShowAlert}
+                />
+              ) : (
+                <></>
+              )}
             </Row>
           </Form>
         ):(
