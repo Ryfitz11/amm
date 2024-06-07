@@ -14,8 +14,8 @@ import { addLiquidity, loadBalances } from "../store/interactions"
 
 
 const Deposit = () => {
-  const[token1Amount, setToken1Amount] = useState(0)
-  const[token2Amount, setToken2Amount] = useState(0)
+  const [token1Amount, setToken1Amount] = useState(0)
+  const [token2Amount, setToken2Amount] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
 
   const provider = useSelector(state => state.provider.connection)
@@ -29,7 +29,6 @@ const Deposit = () => {
   const isDepositing = useSelector(state => state.amm.depositing.isDepositing)
   const isSuccess = useSelector(state => state.amm.depositing.isSuccess)
   const transactionHash = useSelector(state => state.amm.depositing.transactionHash)
-
   const dispatch = useDispatch()
 
   const amountHandler = async (e) => {
