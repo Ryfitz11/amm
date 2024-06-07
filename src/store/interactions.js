@@ -167,7 +167,6 @@ export const loadAllSwaps = async (provider, amm, dispatch) => {
   const swaps = swapStream.map(event => {
     return { hash: event.transactionHash, args: event.args}
   })
-  console.log(swaps)
 
   dispatch(swapsLoaded(swaps))
 }
